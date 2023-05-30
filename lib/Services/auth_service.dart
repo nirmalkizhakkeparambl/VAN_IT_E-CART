@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:ntfp_cart/Constants/error_handling.dart';
+import 'package:ntfp_cart/Constants/error_handlingStream.dart';
 import 'package:ntfp_cart/Constants/global_variables.dart';
 import 'package:ntfp_cart/Constants/utils.dart';
 import 'package:ntfp_cart/Models/user.dart';
@@ -28,18 +29,20 @@ class AuthService {
         password: password,
         email: email,
         address: '',
-        type: '',
+        type: 'user',
         token: '',
         cart: [],
       );
-
+      List<String> requestBody = [user.toJson()];
       http.Response res = await http.post(
-        Uri.parse('$uri/api/signup'),
-        body: user.toJson(),
+        Uri.parse('$uri/vanITSignUp'),
+        body: jsonEncode(requestBody),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
+      print(user.toJson());
+      print(requestBody);
 
       httpErrorHandle(
         response: res,
@@ -52,7 +55,8 @@ class AuthService {
         },
       );
     } catch (e) {
-      //  showSnackBar(context, e.toString());
+      showSnackBar(context, e.toString());
+      print(e.toString());
     }
   }
 
@@ -63,23 +67,42 @@ class AuthService {
     required String password,
   }) async {
     try {
-      http.Response res = await http.post(
-        Uri.parse('http://15.207.105.77/api/auth/NewLogin'),
-        body: jsonEncode({
-          'email': email,
-          'password': password,
-        }),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-      );
-      httpErrorHandle(
+      var headers = {'Content-Type': 'application/json'};
+      var request = http.Request(
+          'GET', Uri.parse('http://68.178.167.39/E_CART_API/API/vanITLogin'));
+      request.body = json.encode({
+        'email': email,
+        'password': password,
+      });
+      request.headers.addAll(headers);
+      print("hello11");
+      http.StreamedResponse res = await request.send();
+      final responseBody = await res.stream.bytesToString();
+      print(responseBody);
+      print(res.stream);
+      print("hello");
+      // http.Response res = await http.get(
+      //   Uri.parse('$uri/vanITLogin'),
+      //   body: jsonEncode([
+      //     {
+      //       'email': email,
+      //       'password': password,
+      //     }
+      //   ]),
+      //   headers: <String, String>{
+      //     'Content-Type': 'application/json; charset=UTF-8',
+      //   },
+      // );
+      httpErrorHandleStream(
         response: res,
         context: context,
         onSuccess: () async {
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          Provider.of<UserProvider>(context, listen: false).setUser(res.body);
-          await prefs.setString('x-auth-token', jsonDecode(res.body)['token']);
+          Provider.of<UserProvider>(context, listen: false)
+              .setUser(responseBody);
+
+          await prefs.setString(
+              'x-auth-token', jsonDecode(responseBody)['type_user']);
           Navigator.pushNamedAndRemoveUntil(
             context,
             BottomBar.routeName,
@@ -88,12 +111,12 @@ class AuthService {
         },
       );
     } catch (e) {
-      //  showSnackBar(context, e.toString());
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        BottomBar.routeName,
-        (route) => false,
-      );
+      showSnackBar(context, e.toString());
+      // Navigator.pushNamedAndRemoveUntil(
+      //   context,
+      //   BottomBar.routeName,
+      //   (route) => false,
+      // );
     }
   }
 
@@ -104,13 +127,13 @@ class AuthService {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('x-auth-token');
-      print("Token" + token.toString());
+      print("Token123" + token.toString());
       if (token == null) {
         prefs.setString('x-auth-token', '');
       }
-
+      print("Token1233");
       var tokenRes = await http.post(
-        Uri.parse('$uri/tokenIsValid'),
+        Uri.parse('$uri/ValidateToken'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': token!
@@ -132,7 +155,7 @@ class AuthService {
         userProvider.setUser(userRes.body);
       }
     } catch (e) {
-      // showSnackBar(context, e.toString());
+      showSnackBar(context, e.toString());
     }
   }
 }
