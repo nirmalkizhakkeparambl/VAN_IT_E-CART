@@ -36,13 +36,13 @@ class User {
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      id: map['name_user'] ?? '',
+      id: map['id'].toString(),
       name: map['name_user'] ?? '',
       email: map['email_user'] ?? '',
       password: map['password_user'] ?? '',
       address: map['address_user'] ?? '',
       type: map['type_user'] ?? '',
-      token: map['type_user'] ?? '',
+      token: map['token_user'] ?? '',
       // cart: map[[
       //       "0",
       //       "0",

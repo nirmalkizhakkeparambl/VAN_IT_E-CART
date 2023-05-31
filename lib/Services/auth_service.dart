@@ -42,7 +42,9 @@ class AuthService {
         },
       );
       print(user.toJson());
+      print("ale,,,,");
       print(requestBody);
+      print(res.body + "responceLogin");
 
       httpErrorHandle(
         response: res,
@@ -71,15 +73,15 @@ class AuthService {
       var request = http.Request(
           'GET', Uri.parse('http://68.178.167.39/E_CART_API/API/vanITLogin'));
       request.body = json.encode({
-        'email': email,
-        'password': password,
+        'Email': email,
+        'Password': password,
       });
       request.headers.addAll(headers);
       print("hello11");
       http.StreamedResponse res = await request.send();
-      final responseBody = await res.stream.bytesToString();
-      print(responseBody);
-      print(res.stream);
+      String responseBody = await res.stream.bytesToString();
+      dynamic jsonData = json.decode(responseBody);
+      print(jsonData);
       print("hello");
       // http.Response res = await http.get(
       //   Uri.parse('$uri/vanITLogin'),
@@ -101,8 +103,17 @@ class AuthService {
           Provider.of<UserProvider>(context, listen: false)
               .setUser(responseBody);
 
-          await prefs.setString(
-              'x-auth-token', jsonDecode(responseBody)['type_user']);
+          await {
+            prefs.setString(
+              'x-auth-token',
+              jsonDecode(responseBody)['token_user'],
+            ),
+            prefs.setString(
+              'x-auth-ID',
+              jsonDecode(responseBody)['id'].toString(),
+            )
+          };
+
           Navigator.pushNamedAndRemoveUntil(
             context,
             BottomBar.routeName,
@@ -127,27 +138,39 @@ class AuthService {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('x-auth-token');
+      String? ID = prefs.getString('x-auth-ID');
       print("Token123" + token.toString());
+      print("ID123" + ID.toString());
       if (token == null) {
         prefs.setString('x-auth-token', '');
       }
       print("Token1233");
-      var tokenRes = await http.post(
+      // var tokenRes = await http.post(
+      //   Uri.parse('$uri/ValidateToken'),
+      //   headers: <String, String>{
+      //     'Content-Type': 'application/json; charset=UTF-8',
+      //   },
+      // );
+
+      http.Response res = await http.post(
         Uri.parse('$uri/ValidateToken'),
+        body: jsonEncode({"user_id": ID, "token": token}),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': token!
         },
       );
 
-      var response = jsonDecode(tokenRes.body);
+      print("ale,,,,");
+
+      print(res.body + "responceLogin");
+      var response = jsonDecode(res.body);
 
       if (response == true) {
         http.Response userRes = await http.get(
           Uri.parse('$uri/'),
           headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            'x-auth-token': token
+            // 'Content-Type': 'application/json; charset=UTF-8',
+            // 'x-auth-token': token
           },
         );
 

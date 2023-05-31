@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:ntfp_cart/Constants/error_handling.dart';
+import 'package:ntfp_cart/Constants/error_handlingStream.dart';
 import 'package:ntfp_cart/Constants/global_variables.dart';
 import 'package:ntfp_cart/Constants/utils.dart';
 import 'package:ntfp_cart/Models/product.dart';
@@ -17,21 +18,36 @@ class HomeServices {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     List<Product> productList = [];
     try {
-      http.Response res = await http
-          .get(Uri.parse('$uri/api/products?category=$category'), headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': userProvider.user.token,
-      });
+      // http.Response res =
+      //     await http.get(Uri.parse('$uri/ProductSearch'), headers: {
+      //   'Content-Type': 'application/json; charset=UTF-8',
+      // });
+      var headers = {'Content-Type': 'application/json'};
+      var request = http.Request('GET', Uri.parse('$uri/ProductSearch'));
+      request.body = json.encode([
+        {
+          'productName': "",
+          'catogory': category,
+        }
+      ]);
+      request.headers.addAll(headers);
+      print("hello11");
+      http.StreamedResponse res = await request.send();
+      String responseBody = await res.stream.bytesToString();
+      dynamic jsonData = json.decode(responseBody);
+      print(jsonData);
+      print("hello");
 
-      httpErrorHandle(
+      httpErrorHandleStream(
         response: res,
         context: context,
         onSuccess: () {
-          for (int i = 0; i < jsonDecode(res.body).length; i++) {
+          print("catogory succedd");
+          for (int i = 0; i < jsonDecode(responseBody).length; i++) {
             productList.add(
               Product.fromJson(
                 jsonEncode(
-                  jsonDecode(res.body)[i],
+                  jsonDecode(responseBody)[i],
                 ),
               ),
             );
@@ -39,7 +55,8 @@ class HomeServices {
         },
       );
     } catch (e) {
-      // showSnackBar(context, e.toString());
+      showSnackBar(context, e.toString());
+      print("product catogory errr");
     }
     return productList;
   }
@@ -49,32 +66,40 @@ class HomeServices {
   }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     Product product = Product(
-      name: 'Mobiles',
-      description: '',
-      quantity: 2,
-      images: [
-        "https://images-eu.ssl-images-amazon.com/images/G/31/img21/Wireless/WLA/TS/D37847648_Accessories_savingdays_Jan22_Cat_PC_1500.jpg"
-      ],
-      category: '',
-      price: 0,
-    );
+        name: '',
+        description: '',
+        quantity: 1,
+        images: [],
+        category: '',
+        price: 0);
 
     try {
-      http.Response res =
-          await http.get(Uri.parse('$uri/api/deal-of-day'), headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': userProvider.user.token,
-      });
+      // http.Response res =
+      //     await http.get(Uri.parse('$uri/api/deal-of-day'), headers: {
+      //   'Content-Type': 'application/json; charset=UTF-8',
+      //   'x-auth-token': userProvider.user.token,
+      // });
+      var headers = {'Content-Type': 'application/json'};
+      var request = http.Request('GET', Uri.parse('$uri/DealOfTheDay'));
+      request.body = json.encode({});
+      request.headers.addAll(headers);
+      print("hello11");
+      http.StreamedResponse res = await request.send();
+      String responseBody = await res.stream.bytesToString();
+      dynamic jsonData = json.decode(responseBody);
+      print(jsonData);
+      print("hello");
 
-      httpErrorHandle(
+      httpErrorHandleStream(
         response: res,
         context: context,
         onSuccess: () {
-          product = Product.fromJson(res.body);
+          product = Product.fromJson(res.toString());
         },
       );
     } catch (e) {
-      // showSnackBar(context, e.toString());
+      showSnackBar(context, e.toString());
+      print("error deal of the day");
     }
     return product;
   }

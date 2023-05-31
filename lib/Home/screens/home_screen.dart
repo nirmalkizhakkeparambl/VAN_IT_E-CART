@@ -44,7 +44,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       onFieldSubmitted: navigateToSearchScreen,
                       decoration: InputDecoration(
                         prefixIcon: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            print("serasssss");
+                          },
                           child: const Padding(
                             padding: EdgeInsets.only(
                               left: 6,
