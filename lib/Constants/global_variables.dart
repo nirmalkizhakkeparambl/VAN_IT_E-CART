@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-String uri = 'http://<yourip>:3000';
+String uri = 'http://68.178.167.39/E_CART_API/API';
 
 class GlobalVariables {
   // COLORS
@@ -30,7 +30,7 @@ class GlobalVariables {
 
   static const List<Map<String, String>> categoryImages = [
     {
-      'title': 'Mobiles',
+      'title': 'middle',
       'image': 'assets/images/mobiles.jpeg',
     },
     {

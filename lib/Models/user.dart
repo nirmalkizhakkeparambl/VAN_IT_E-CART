@@ -23,12 +23,12 @@ class User {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'name': name,
-      'email': email,
-      'password': password,
-      'address': address,
-      'type': type,
+      'user_id': id.toString(),
+      'Name': name,
+      'Email': email,
+      'Password': password,
+      'Address': address,
+      'user_type': type,
       'token': token,
       'cart': cart,
     };
@@ -36,13 +36,18 @@ class User {
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      id: map['_id'] ?? '',
-      name: map['name'] ?? '',
-      email: map['email'] ?? '',
-      password: map['password'] ?? '',
-      address: map['address'] ?? '',
-      type: map['type'] ?? '',
-      token: map['token'] ?? '',
+      id: map['id'].toString(),
+      name: map['name_user'] ?? '',
+      email: map['email_user'] ?? '',
+      password: map['password_user'] ?? '',
+      address: map['address_user'] ?? '',
+      type: map['type_user'] ?? '',
+      token: map['token_user'] ?? '',
+      // cart: map[[
+      //       "0",
+      //       "0",
+      //     ]] ??
+      //     ["asss"]
       cart: List<Map<String, dynamic>>.from(
         map['cart']?.map(
           (x) => Map<String, dynamic>.from(x),

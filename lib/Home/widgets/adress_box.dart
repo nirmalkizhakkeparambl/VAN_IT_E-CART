@@ -8,7 +8,8 @@ class AddressBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
-
+    print("IDDDDDDD" + user.id);
+    print("TOKEEN" + user.token);
     return Container(
       height: 40,
       decoration: const BoxDecoration(

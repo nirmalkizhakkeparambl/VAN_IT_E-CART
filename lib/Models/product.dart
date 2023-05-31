@@ -37,20 +37,26 @@ class Product {
 
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
-      name: map['name'] ?? '',
-      description: map['description'] ?? '',
-      quantity: map['quantity']?.toDouble() ?? 0.0,
-      images: List<String>.from(map['images']),
-      category: map['category'] ?? '',
-      price: map['price']?.toDouble() ?? 0.0,
-      id: map['_id'],
-      rating: map['ratings'] != null
-          ? List<Rating>.from(
-              map['ratings']?.map(
-                (x) => Rating.fromMap(x),
-              ),
-            )
-          : null,
+      name: map['product_name'] ?? '',
+      description: map['product_discription'] ?? '',
+      quantity: map['product_quntity']?.toDouble() ?? 0.0,
+      // images: List<String>.from(map['product_images']),
+      images: map['product_images'],
+      category: map['product_catogory'] ?? '',
+      price: map['product_price']?.toDouble() ?? 0.0,
+      id: map['product_id'],
+      rating: map[[
+            "0",
+            "0",
+          ]] ??
+          [],
+      // rating: map['ratings'] != null
+      //     ? List<Rating>.from(
+      //         map['ratings']?.map(
+      //           (x) => Rating.fromMap(x),
+      //         ),
+      //       )
+      //     : null,
     );
   }
 
