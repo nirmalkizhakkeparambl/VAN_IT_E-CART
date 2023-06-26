@@ -199,7 +199,7 @@ class _AddressScreenState extends State<AddressScreen> {
                 paymentItems: paymentItems,
                 height: 50,
                 // style: GooglePayButtonStyle.black,
-                type: GooglePayButtonType.buy,
+                // type: GooglePayButtonType.buy,
                 margin: const EdgeInsets.only(top: 15),
                 loadingIndicator: const Center(
                   child: CircularProgressIndicator(),

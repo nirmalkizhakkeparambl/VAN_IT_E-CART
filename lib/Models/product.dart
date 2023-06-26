@@ -41,13 +41,13 @@ class Product {
       description: map['product_discription'] ?? '',
       quantity: map['product_quntity']?.toDouble() ?? 0.0,
       // images: List<String>.from(map['product_images']),
-      images: map['product_images'],
+      images: map[['product_images']],
       category: map['product_catogory'] ?? '',
       price: map['product_price']?.toDouble() ?? 0.0,
-      id: map['product_id'],
+      id: map['product_id'].toString(),
       rating: map[[
-            "0",
-            "0",
+            "0"
+                "0",
           ]] ??
           [],
       // rating: map['ratings'] != null
