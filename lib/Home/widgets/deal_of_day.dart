@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'package:flutter/widgets.dart';
-import 'package:charts_common/src/chart/cartesian/axis/axis.dart' hide Axis;
-import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' show TextStyle;
+import 'package:flutter/src/painting/basic_types.dart' as prefix;
 import 'package:ntfp_cart/CommonWidgets/loader.dart';
 import 'package:ntfp_cart/Home/services/home_services.dart';
 import 'package:ntfp_cart/Models/Productnw.dart';
@@ -47,7 +46,7 @@ class _DealOfDayState extends State<DealOfDay> {
 
   @override
   Widget build(BuildContext context) {
-    return product == null || product.isEmpty
+    return product.isEmpty
         ? const Loader()
         : GestureDetector(
             onTap: navigateToDetailScreen,
@@ -58,45 +57,41 @@ class _DealOfDayState extends State<DealOfDay> {
                   padding: const EdgeInsets.only(left: 10, top: 15),
                   child: const Text(
                     'Deal of the day',
-                    // style: TextStyle(fontSize: 20),
-                  ),
-                ),
-                Image.network(
-                  product[0].productImages[0],
-                  height: 235,
-                  fit: BoxFit.fitHeight,
-                ),
-                Container(
-                  padding: const EdgeInsets.only(left: 15),
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    '\$${product[0].productPrice}',
-                    // style: const TextStyle(fontSize: 18),
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.topLeft,
-                  padding: const EdgeInsets.only(left: 15, top: 5, right: 40),
-                  child: Text(
-                    product[0].productName,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 20),
                   ),
                 ),
                 SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: product[0]
-                        .productImages
-                        .map(
-                          (e) => Image.network(
-                            e,
-                            fit: BoxFit.fitWidth,
-                            width: 100,
-                            height: 100,
+                    children: product.map((currentProduct) {
+                      return Column(
+                        children: [
+                          Image.network(
+                            currentProduct.productImages[0],
+                            height: 235,
+                            fit: BoxFit.fitHeight,
                           ),
-                        )
-                        .toList(),
+                          Container(
+                            padding: const EdgeInsets.only(left: 15),
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              '\$${currentProduct.productPrice}',
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.topLeft,
+                            padding: const EdgeInsets.only(
+                                left: 15, top: 5, right: 40),
+                            child: Text(
+                              currentProduct.productName,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      );
+                    }).toList(),
                   ),
                 ),
                 Container(
@@ -106,9 +101,9 @@ class _DealOfDayState extends State<DealOfDay> {
                   alignment: Alignment.topLeft,
                   child: const Text(
                     'See all deals',
-                    // style: TextStyle(
-                    //   color: Color(Color),
-                    // ),
+                    style: TextStyle(
+                      color: Colors.blue,
+                    ),
                   ),
                 ),
               ],
