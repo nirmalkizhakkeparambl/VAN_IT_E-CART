@@ -113,12 +113,21 @@ class HomeServices {
       http.StreamedResponse res = await request.send();
       String responseBody = await res.stream.bytesToString();
       dynamic jsonData = json.decode(responseBody);
-      print(jsonData);
-      print("helloDealOfDay");
-      List<Productnw> products = (jsonData as List<dynamic>).map((jsonObject) {
-        return Productnw.fromJson(jsonObject);
-      }).toList();
-      return products;
+
+      if (jsonData is List &&
+          jsonData.length == 1 &&
+          jsonData[0]['Status'] == 'Not Found!') {
+        // Return an empty list since the response indicates "Not Found"
+        return [];
+      } else {
+        print(jsonData);
+        print("helloDealOfDay");
+        List<Productnw> products =
+            (jsonData as List<dynamic>).map((jsonObject) {
+          return Productnw.fromJson(jsonObject);
+        }).toList();
+        return products;
+      }
     } catch (e) {
       print("Error fetching deal of the day: $e");
       return [];

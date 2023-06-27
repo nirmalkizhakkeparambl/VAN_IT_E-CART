@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ntfp_cart/Constants/error_handling.dart';
 import 'package:ntfp_cart/Constants/global_variables.dart';
 import 'package:ntfp_cart/Constants/utils.dart';
+import 'package:ntfp_cart/Models/Productnw.dart';
 import 'package:ntfp_cart/Models/product.dart';
 import 'package:ntfp_cart/Models/user.dart';
 import 'package:ntfp_cart/Provider/user_provider.dart';
@@ -13,7 +14,7 @@ import 'package:http/http.dart' as http;
 class ProductDetailsServices {
   void addToCart({
     required BuildContext context,
-    required Product product,
+    required Productnw product,
   }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
@@ -25,7 +26,7 @@ class ProductDetailsServices {
           'x-auth-token': userProvider.user.token,
         },
         body: jsonEncode({
-          'id': product.id!,
+          'id': product.productId,
         }),
       );
 
@@ -45,7 +46,7 @@ class ProductDetailsServices {
 
   void rateProduct({
     required BuildContext context,
-    required Product product,
+    required Productnw product,
     required double rating,
   }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -58,7 +59,7 @@ class ProductDetailsServices {
           'x-auth-token': userProvider.user.token,
         },
         body: jsonEncode({
-          'id': product.id!,
+          'id': product.productId,
           'rating': rating,
         }),
       );

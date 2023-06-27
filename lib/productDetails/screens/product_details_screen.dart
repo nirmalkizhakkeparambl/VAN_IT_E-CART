@@ -4,6 +4,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:ntfp_cart/CommonWidgets/coustom_button.dart';
 import 'package:ntfp_cart/CommonWidgets/stars.dart';
 import 'package:ntfp_cart/Constants/global_variables.dart';
+import 'package:ntfp_cart/Models/Productnw.dart';
 import 'package:ntfp_cart/Models/product.dart';
 import 'package:ntfp_cart/Provider/user_provider.dart';
 import 'package:ntfp_cart/productDetails/services/product_details_servies.dart';
@@ -12,7 +13,7 @@ import 'package:provider/provider.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   static const String routeName = '/product-details';
-  final Product product;
+  final Productnw product;
   const ProductDetailScreen({
     Key? key,
     required this.product,
@@ -32,16 +33,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   void initState() {
     super.initState();
     double totalRating = 0;
-    for (int i = 0; i < widget.product.rating!.length; i++) {
-      totalRating += widget.product.rating![i].rating;
-      if (widget.product.rating![i].userId ==
+    for (int i = 0; i < widget.product.rating.length; i++) {
+      totalRating += widget.product.rating[i].rating;
+      if (widget.product.rating[i].userId ==
           Provider.of<UserProvider>(context, listen: false).user.id) {
-        myRating = widget.product.rating![i].rating;
+        myRating = widget.product.rating[i].rating;
       }
     }
 
     if (totalRating != 0) {
-      avgRating = totalRating / widget.product.rating!.length;
+      avgRating = totalRating / widget.product.rating.length;
     }
   }
 
@@ -141,7 +142,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    widget.product.id!,
+                    widget.product.productId.toString(),
                   ),
                   Stars(
                     rating: avgRating,
@@ -155,14 +156,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 horizontal: 10,
               ),
               child: Text(
-                widget.product.name,
+                widget.product.productName,
                 style: const TextStyle(
                   fontSize: 15,
                 ),
               ),
             ),
             CarouselSlider(
-              items: widget.product.images.map(
+              items: widget.product.productImages.map(
                 (i) {
                   return Builder(
                     builder: (BuildContext context) => Image.network(
@@ -194,7 +195,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                   children: [
                     TextSpan(
-                      text: '\$${widget.product.price}',
+                      text: '\$${widget.product.productPrice}',
                       style: const TextStyle(
                         fontSize: 22,
                         color: Colors.red,
@@ -207,7 +208,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(widget.product.description),
+              child: Text(widget.product.productDescription),
             ),
             Container(
               color: Colors.black12,

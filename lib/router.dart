@@ -4,6 +4,7 @@ import 'package:ntfp_cart/CommonWidgets/bottom_bar.dart';
 import 'package:ntfp_cart/Features/Address/screen/address_screen.dart';
 import 'package:ntfp_cart/Home/screens/categorey_deals_screen.dart';
 import 'package:ntfp_cart/Home/screens/home_screen.dart';
+import 'package:ntfp_cart/Models/Productnw.dart';
 import 'package:ntfp_cart/Models/order.dart';
 import 'package:ntfp_cart/OrderDetailsScreen/order_details_screen.dart';
 import 'package:ntfp_cart/auth/screens/auth_screen.dart';
@@ -53,7 +54,7 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         ),
       );
     case ProductDetailScreen.routeName:
-      var product = routeSettings.arguments as Product;
+      var product = routeSettings.arguments as Productnw;
       return MaterialPageRoute(
         settings: routeSettings,
         builder: (_) => ProductDetailScreen(

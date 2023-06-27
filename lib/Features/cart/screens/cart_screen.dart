@@ -133,9 +133,10 @@ class _CartScreenState extends State<CartScreen> {
               itemCount: user.cart.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                return CartProduct(
-                  index: index,
-                );
+                return widget;
+                // return CartProduct(
+                //   index: index,
+                // );
               },
             ),
           ],
